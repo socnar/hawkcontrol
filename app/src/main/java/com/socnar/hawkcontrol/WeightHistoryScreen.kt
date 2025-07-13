@@ -1,6 +1,8 @@
 package com.socnar.hawkcontrol
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,8 +30,10 @@ fun WeightHistoryScreen(
     weights: List<WeightEntry>,
     onAddWeight: () -> Unit,
     onShowGraphs: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onWeightEntryClick: (WeightEntry) -> Unit // Nuevo parámetro
 ) {
+    BackHandler(onBack = onBack)
     Scaffold(
         topBar = {
             TopAppBar(
@@ -110,30 +114,35 @@ fun WeightHistoryScreen(
                 Modifier
                     .weight(1f)
                     .padding(horizontal = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp) // Más espacio entre filas
             ) {
                 items(weights) { entry ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .shadow(1.dp, RoundedCornerShape(12.dp)),
+                            .shadow(1.dp, RoundedCornerShape(12.dp))
+                            .clickable { onWeightEntryClick(entry) }, // Hace la card clickable
                         shape = RoundedCornerShape(12.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
                         Row(
                             Modifier
                                 .fillMaxWidth()
-                                .padding(12.dp),
+                                .padding(vertical = 8.dp, horizontal = 8.dp), // Más padding interno
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(entry.fecha, modifier = Modifier.weight(1f), fontSize = 16.sp)
-                            Text(entry.pesoAntesVolar?.toString() ?: "", modifier = Modifier.weight(1f), fontSize = 16.sp)
-                            Text(entry.comentario ?: "", modifier = Modifier.weight(1f), fontSize = 16.sp)
+                            val fechaCorta = try {
+                                val partes = entry.fecha.split("/")
+                                if (partes.size == 3) "${partes[0]}/${partes[1]}/${partes[2].takeLast(2)}" else entry.fecha
+                            } catch (e: Exception) { entry.fecha }
+                            Text(fechaCorta, modifier = Modifier.weight(1f), fontSize = 13.sp)
+                            Text(entry.pesoAntesVolar?.toString() ?: "", modifier = Modifier.weight(1f), fontSize = 13.sp)
+                            Text(entry.comentario ?: "", modifier = Modifier.weight(1f), fontSize = 13.sp)
                             when (bird.modalidad) {
-                                Modalidad.ALTANERIA -> Text(entry.altura?.toString() ?: "", modifier = Modifier.weight(1f), fontSize = 16.sp)
-                                Modalidad.BAJO_VUELO -> Text(entry.numCapturas?.toString() ?: "", modifier = Modifier.weight(1f), fontSize = 16.sp)
-                                Modalidad.VELOCIDAD -> Text(entry.tiempo?.toString() ?: "", modifier = Modifier.weight(1f), fontSize = 16.sp)
+                                Modalidad.ALTANERIA -> Text(entry.altura?.toString() ?: "", modifier = Modifier.weight(1f), fontSize = 13.sp)
+                                Modalidad.BAJO_VUELO -> Text(entry.numCapturas?.toString() ?: "", modifier = Modifier.weight(1f), fontSize = 13.sp)
+                                Modalidad.VELOCIDAD -> Text(entry.tiempo?.toString() ?: "", modifier = Modifier.weight(1f), fontSize = 13.sp)
                             }
                         }
                     }

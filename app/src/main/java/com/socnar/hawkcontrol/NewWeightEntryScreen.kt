@@ -2,6 +2,7 @@ package com.socnar.hawkcontrol
 
 import android.app.DatePickerDialog
 import java.util.Calendar
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -35,6 +36,7 @@ fun NewWeightEntryScreen(
     ) -> Unit,
     onCancel: () -> Unit
 ) {
+    BackHandler(onBack = onCancel)
     // Obtener la fecha de hoy compatible con Android API < 26
     val today = remember {
         SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())

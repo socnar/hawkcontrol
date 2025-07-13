@@ -30,6 +30,7 @@ class MainActivity : ComponentActivity() {
             var showSettings by remember { mutableStateOf(false) }
             var showAddBird by remember { mutableStateOf(false) }
             var selectedBird by remember { mutableStateOf<BirdListItem?>(null) }
+            var selectedWeightEntry by remember { mutableStateOf<WeightEntry?>(null) }
             // Dummy list for now, replace with ViewModel data
             val birds by viewModel.birds.collectAsState()
 
@@ -101,13 +102,22 @@ class MainActivity : ComponentActivity() {
                                         },
                                         onCancel = { showNewWeight = false }
                                     )
+                                } else if (selectedWeightEntry != null) {
+                                    ViewWeightEntryScreen(
+                                        bird = bird!!,
+                                        entry = selectedWeightEntry!!,
+                                        onBack = { selectedWeightEntry = null }
+                                    )
                                 } else {
                                     WeightHistoryScreen(
                                         bird = bird!!,
                                         weights = weights,
                                         onAddWeight = { showNewWeight = true },
                                         onShowGraphs = { showGraphs = true },
-                                        onBack = { selectedBird = null }
+                                        onBack = { selectedBird = null },
+                                        onWeightEntryClick = { entry ->
+                                            selectedWeightEntry = entry
+                                        }
                                     )
                                     if (showGraphs) {
                                         GraphsScreen(
