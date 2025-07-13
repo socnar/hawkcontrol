@@ -15,6 +15,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.draw.shadow
+import androidx.compose.foundation.shape.RoundedCornerShape
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,138 +71,146 @@ fun NewWeightEntryScreen(
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text("Nuevo registro de peso", style = MaterialTheme.typography.headlineMedium)
-        OutlinedTextField(
-            value = fecha,
-            onValueChange = { fecha = it },
-            label = { Text("Fecha (DD/MM/YYYY)") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { datePickerDialog.show() },
-            readOnly = false
-        )
-        OutlinedTextField(
-            value = pesoAntesVolar,
-            onValueChange = { pesoAntesVolar = it },
-            label = { Text("Peso antes de volar (gramos)") },
-            modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-        )
-        var expandedTipoVuelo by remember { mutableStateOf(false) }
-        if ((bird.modalidad == Modalidad.ALTANERIA || bird.modalidad == Modalidad.VELOCIDAD)) {
-            ExposedDropdownMenuBox(
-                expanded = expandedTipoVuelo,
-                onExpandedChange = { expandedTipoVuelo = it }
-            ) {
+        Card(
+            modifier = Modifier.fillMaxWidth().shadow(2.dp, RoundedCornerShape(16.dp)),
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+        ) {
+            Column(Modifier.padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text("Nuevo registro de peso", style = MaterialTheme.typography.headlineMedium)
                 OutlinedTextField(
-                    value = tipoVuelo,
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text("Tipo de vuelo") },
+                    value = fecha,
+                    onValueChange = { fecha = it },
+                    label = { Text("Fecha (DD/MM/YYYY)") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .menuAnchor()
-                        .clickable { expandedTipoVuelo = !expandedTipoVuelo },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTipoVuelo)
-                    },
-                    interactionSource = remember { MutableInteractionSource() },
-                    singleLine = true,
-                    enabled = true
+                        .clickable { datePickerDialog.show() },
+                    readOnly = false
                 )
-                DropdownMenu(
-                    expanded = expandedTipoVuelo,
-                    onDismissRequest = { expandedTipoVuelo = false }
-                ) {
-                    listOf("ENTRENAMIENTO", "CAZA").forEach { tipo ->
-                        DropdownMenuItem(
-                            text = { Text(tipo.capitalize()) },
-                            onClick = {
-                                tipoVuelo = tipo
-                                expandedTipoVuelo = false
-                            }
-                        )
-                    }
-                }
-            }
-        }
-        if (bird.modalidad == Modalidad.ALTANERIA) {
-            OutlinedTextField(
-                value = altura,
-                onValueChange = { altura = it },
-                label = { Text("Altura (metros)") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-        }
-        if (bird.modalidad == Modalidad.BAJO_VUELO) {
-            OutlinedTextField(
-                value = numCapturas,
-                onValueChange = { numCapturas = it },
-                label = { Text("Nº de capturas") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-        }
-        if (bird.modalidad == Modalidad.VELOCIDAD) {
-            var expanded by remember { mutableStateOf(false) }
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = it }
-            ) {
                 OutlinedTextField(
-                    value = distancia,
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text("Distancia") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .menuAnchor()
-                        .clickable { expanded = !expanded },
-                    trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                    },
-                    interactionSource = remember { MutableInteractionSource() },
-                    singleLine = true,
-                    enabled = true
+                    value = pesoAntesVolar,
+                    onValueChange = { pesoAntesVolar = it },
+                    label = { Text("Peso antes de volar (gramos)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    listOf("200", "300", "400").forEach { dist ->
-                        DropdownMenuItem(
-                            text = { Text("${dist}m") },
-                            onClick = {
-                                distancia = dist
-                                expanded = false
-                            }
+                var expandedTipoVuelo by remember { mutableStateOf(false) }
+                if ((bird.modalidad == Modalidad.ALTANERIA || bird.modalidad == Modalidad.VELOCIDAD)) {
+                    ExposedDropdownMenuBox(
+                        expanded = expandedTipoVuelo,
+                        onExpandedChange = { expandedTipoVuelo = it }
+                    ) {
+                        OutlinedTextField(
+                            value = tipoVuelo,
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("Tipo de vuelo") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .menuAnchor()
+                                .clickable { expandedTipoVuelo = !expandedTipoVuelo },
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTipoVuelo)
+                            },
+                            interactionSource = remember { MutableInteractionSource() },
+                            singleLine = true,
+                            enabled = true
                         )
+                        DropdownMenu(
+                            expanded = expandedTipoVuelo,
+                            onDismissRequest = { expandedTipoVuelo = false }
+                        ) {
+                            listOf("ENTRENAMIENTO", "CAZA").forEach { tipo ->
+                                DropdownMenuItem(
+                                    text = { Text(tipo.capitalize()) },
+                                    onClick = {
+                                        tipoVuelo = tipo
+                                        expandedTipoVuelo = false
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
+                if (bird.modalidad == Modalidad.ALTANERIA) {
+                    OutlinedTextField(
+                        value = altura,
+                        onValueChange = { altura = it },
+                        label = { Text("Altura (metros)") },
+                        modifier = Modifier.fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+                }
+                if (bird.modalidad == Modalidad.BAJO_VUELO) {
+                    OutlinedTextField(
+                        value = numCapturas,
+                        onValueChange = { numCapturas = it },
+                        label = { Text("Nº de capturas") },
+                        modifier = Modifier.fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+                }
+                if (bird.modalidad == Modalidad.VELOCIDAD) {
+                    var expanded by remember { mutableStateOf(false) }
+                    ExposedDropdownMenuBox(
+                        expanded = expanded,
+                        onExpandedChange = { expanded = it }
+                    ) {
+                        OutlinedTextField(
+                            value = distancia,
+                            onValueChange = {},
+                            readOnly = true,
+                            label = { Text("Distancia") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .menuAnchor()
+                                .clickable { expanded = !expanded },
+                            trailingIcon = {
+                                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                            },
+                            interactionSource = remember { MutableInteractionSource() },
+                            singleLine = true,
+                            enabled = true
+                        )
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            listOf("200", "300", "400").forEach { dist ->
+                                DropdownMenuItem(
+                                    text = { Text("${dist}m") },
+                                    onClick = {
+                                        distancia = dist
+                                        expanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    OutlinedTextField(
+                        value = tiempo,
+                        onValueChange = { tiempo = it },
+                        label = { Text("Tiempo (segundos, admite decimales)") },
+                        modifier = Modifier.fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                    )
+                }
+                OutlinedTextField(
+                    value = comentario,
+                    onValueChange = { comentario = it },
+                    label = { Text("Comentario (opcional)") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                if (bird.modalidad == Modalidad.BAJO_VUELO) {
+                    OutlinedTextField(
+                        value = numLances,
+                        onValueChange = { numLances = it },
+                        label = { Text("Nº de lances") },
+                        modifier = Modifier.fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+                }
             }
-            OutlinedTextField(
-                value = tiempo,
-                onValueChange = { tiempo = it },
-                label = { Text("Tiempo (segundos, admite decimales)") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-            )
-        }
-        OutlinedTextField(
-            value = comentario,
-            onValueChange = { comentario = it },
-            label = { Text("Comentario (opcional)") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        if (bird.modalidad == Modalidad.BAJO_VUELO) {
-            OutlinedTextField(
-                value = numLances,
-                onValueChange = { numLances = it },
-                label = { Text("Nº de lances") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             Button(
@@ -217,11 +227,12 @@ fun NewWeightEntryScreen(
                         tiempo.takeIf { it.isNotBlank() }
                     )
                 },
-                enabled = fecha.isNotBlank() && pesoAntesVolar.isNotBlank()
+                enabled = fecha.isNotBlank() && pesoAntesVolar.isNotBlank(),
+                shape = RoundedCornerShape(12.dp)
             ) {
                 Text("Guardar")
             }
-            OutlinedButton(onClick = onCancel) {
+            OutlinedButton(onClick = onCancel, shape = RoundedCornerShape(12.dp)) {
                 Text("Cancelar")
             }
         }

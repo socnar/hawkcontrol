@@ -16,6 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 // Dummy data for birds (replace with real data from ViewModel)
@@ -35,38 +38,56 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Listado de Aves") },
+                title = { Text("Listado de Aves", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)) },
                 actions = {
                     IconButton(onClick = onSettingsClick) {
                         Icon(Icons.Default.Settings, contentDescription = "Ajustes")
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                )
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = onAddBird) {
+            FloatingActionButton(
+                onClick = onAddBird,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                shape = RoundedCornerShape(50)
+            ) {
                 Icon(Icons.Default.Add, contentDescription = "Añadir Ave")
             }
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(padding),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(birds) { bird ->
-                ListItem(
-                    headlineContent = { Text(bird.nombre) },
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { onBirdClick(bird) },
-                    trailingContent = {
-                        IconButton(onClick = { birdToDelete = bird }) {
-                            Icon(Icons.Default.Delete, contentDescription = "Eliminar Ave")
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .shadow(1.dp, RoundedCornerShape(12.dp)),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                ) {
+                    ListItem(
+                        headlineContent = { Text(bird.nombre, fontWeight = FontWeight.Bold) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onBirdClick(bird) },
+                        trailingContent = {
+                            IconButton(onClick = { birdToDelete = bird }) {
+                                Icon(Icons.Default.Delete, contentDescription = "Eliminar Ave")
+                            }
                         }
-                    }
-                )
-                HorizontalDivider()
+                    )
+                }
             }
         }
         if (birdToDelete != null) {
