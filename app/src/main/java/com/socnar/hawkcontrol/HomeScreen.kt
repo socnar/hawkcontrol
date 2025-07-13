@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
@@ -68,13 +69,15 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(birds) { bird ->
+                val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+                val cardColor = if (isDark) com.socnar.hawkcontrol.ui.theme.LighterGray else MaterialTheme.colorScheme.surface
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 12.dp, vertical = 4.dp)
                         .shadow(1.dp, RoundedCornerShape(12.dp)),
                     shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                    colors = CardDefaults.cardColors(containerColor = cardColor)
                 ) {
                     ListItem(
                         headlineContent = { Text(bird.nombre, fontWeight = FontWeight.Bold) },
