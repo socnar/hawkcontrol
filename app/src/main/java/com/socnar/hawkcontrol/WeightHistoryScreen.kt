@@ -48,7 +48,11 @@ fun WeightHistoryScreen(
                     Button(
                         onClick = onShowGraphs,
                         shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        ),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
                     ) {
                         Text("Gráficas", fontWeight = FontWeight.Bold)
                     }
@@ -91,13 +95,13 @@ fun WeightHistoryScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("Fecha", modifier = Modifier.weight(1.2f), fontWeight = FontWeight.Bold)
-                    Text("Peso", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
-                    Text("Comentario", modifier = Modifier.weight(1.5f), fontWeight = FontWeight.Bold)
+                    Text("Fecha", modifier = Modifier.weight(1.2f), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                    Text("Peso", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                    Text("Comentario", modifier = Modifier.weight(1.5f), fontWeight = FontWeight.Bold, fontSize = 13.sp)
                     when (bird.modalidad) {
-                        Modalidad.ALTANERIA -> Text("Altura", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
-                        Modalidad.BAJO_VUELO -> Text("Capturas", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
-                        Modalidad.VELOCIDAD -> Text("Tiempo", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
+                        Modalidad.ALTANERIA -> Text("Altura", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                        Modalidad.BAJO_VUELO -> Text("Capturas", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                        Modalidad.VELOCIDAD -> Text("Tiempo", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold, fontSize = 13.sp)
                     }
                 }
             }

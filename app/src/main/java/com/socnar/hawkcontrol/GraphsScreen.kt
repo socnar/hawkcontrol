@@ -33,12 +33,20 @@ fun GraphsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Gráficas de ${bird.nombre}") },
+                title = {
+                    Text(
+                        "Gráficas de ${bird.nombre}",
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                )
             )
         }
     ) { padding ->
@@ -48,7 +56,15 @@ fun GraphsScreen(
             verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             // Peso vs Fecha (todas las modalidades)
-            Text("Peso vs Fecha", style = MaterialTheme.typography.titleMedium)
+            Text(
+                "Peso vs Fecha",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp), // Aumenta el padding inferior
+                maxLines = 1,
+                softWrap = false
+            )
             val pesoPoints = weights.takeLast(180).mapIndexed { idx, entry ->
                 entry.pesoAntesVolar ?: 0f
             }
@@ -63,7 +79,15 @@ fun GraphsScreen(
                     val alturaPoints = weights.takeLast(180).mapIndexed { idx, entry ->
                         entry.altura?.toFloat() ?: 0f
                     }
-                    Text("Altura vs Fecha", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        "Altura vs Fecha",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp), // Aumenta el padding inferior
+                        maxLines = 1,
+                        softWrap = false
+                    )
                     SimpleLineChart(
                         points = alturaPoints,
                         modifier = Modifier.height(180.dp).fillMaxWidth(),
@@ -75,7 +99,15 @@ fun GraphsScreen(
                     val lancesPoints = weights.takeLast(180).mapIndexed { idx, entry ->
                         entry.numLances?.toFloat() ?: 0f
                     }
-                    Text("Lances vs Fecha", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        "Lances vs Fecha",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp), // Aumenta el padding inferior
+                        maxLines = 1,
+                        softWrap = false
+                    )
                     SimpleLineChart(
                         points = lancesPoints,
                         modifier = Modifier.height(180.dp).fillMaxWidth(),
